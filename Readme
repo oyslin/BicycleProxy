@@ -1,0 +1,6 @@
+Without session:
+	changshu, nantong, zhongshan, shaoxing, wujiang
+Need session:
+	suzhou, kunshan
+
+This is a proxy for getting bicycle station data from Website and respond to Android request
