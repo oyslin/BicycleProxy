@@ -106,13 +106,13 @@ function getBicycleInfo(index, id, res){
 
 function refreshCookieTask(){
 	console.log('----------------------refreshCookieTask------------------------------');
-	for(var i = 0; i < cityArray.length; i++){
+	for(var i = 0; i < 2; i++){
 		//first get cookie
 		getCookieTask(i);
 		//then refresh cookie every 20 minutes
 		setInterval(getCookieTask, 1200000, [i]);
 		//keep session in every 2 minutes
-		keepSessinTask(i);
+		// keepSessinTask(i);
 	}
 }
 
@@ -130,7 +130,7 @@ function getCookieTask(index){
 	var req = http.get(options, function(response) {
 		response.on('end', function(){
 			var cookie = response.headers['set-cookie'][0].split('\\;');
-			console.log('-----------Refresh Cookie cookie = ' + cookie + ', time = ' + new Date().toGMTString());
+			console.log('-----------Refresh Cookie city = ' + cityArray[index] + ', cookie = ' + cookie + ', time = ' + new Date().toGMTString());
 			cookieArray[index] = cookie;
 		});
 	});
