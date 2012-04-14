@@ -122,22 +122,27 @@ function getCookieTask(index){
 	var options = URL.parse(mapUrl);
 	
 	options.headers = {
-		Connection : 'keep-alive',
-		Host : options.host		
+		Connection : 'close',
+		Host : options.host
 	};
 	// options.port = '80';
 	
-	var req = http.get(options, function(response) {
+	http.get(options, function(response) {
 		response.on('end', function(){
-			var cookie = response.headers['set-cookie'][0].split('\\;');
-			console.log('-----------Refresh Cookie city = ' + cityArray[index] + ', cookie = ' + cookie + ', time = ' + new Date().toGMTString());
-			cookieArray[index] = cookie;
+			// var cookie = response.headers['set-cookie'][0].split('\\;');
+			// console.log('-----------Refresh Cookie city = ' + cityArray[index] + ', cookie = ' + cookie + ', time = ' + new Date().toGMTString());
+			// cookieArray[index] = cookie;
+			var newOptions = options;
+			newOptions.headers.Connection = 'keep-alive';
+			http.get(options, function(res){
+				res.on('end', function(){
+					var cookie = response.headers['set-cookie'][0].split('\\;');
+					cookieArray[index] = cookie;
+					console.log('-----------Refresh Cookie city = ' + cityArray[index] + ', cookie = ' + cookie + ', time = ' + new Date().toGMTString());
+				});
+			});
 		});
-	});
-	req.on('error', function(){
-		res.writeHeader(404, "404");
-		res.end('404');
-	});
+	});	
 }
 
 function keepSessinTask(index){
