@@ -106,11 +106,11 @@ function getBicycleInfo(index, id, res){
 
 function refreshCookieTask(){
 	console.log('----------------------refreshCookieTask------------------------------');
-	for(var i = 0; i < 2; i++){
+	for(var i = 0; i < 1; i++){
 		//first get cookie
 		getCookieTask(i);
-		//then refresh cookie every 20 minutes
-		setInterval(getCookieTask, 1200000, [i]);
+		//then refresh cookie every 5 minutes
+		setInterval(getCookieTask, 300000, [i]);
 		//keep session in every 2 minutes
 		// keepSessinTask(i);
 	}
@@ -127,27 +127,31 @@ function getCookieTask(index){
 	};
 	// options.port = '80';
 	
+	
 	http.get(options, function(response) {
-		response.on('end', function(){
+		response.on('end', function() {
 			// var cookie = response.headers['set-cookie'][0].split('\\;');
 			// console.log('-----------Refresh Cookie city = ' + cityArray[index] + ', cookie = ' + cookie + ', time = ' + new Date().toGMTString());
 			// cookieArray[index] = cookie;
 			var newOptions = options;
 			newOptions.headers.Connection = 'keep-alive';
-			http.get(options, function(res){
-				res.on('end', function(){
-					var cookie = response.headers['set-cookie'][0].split('\\;');
-					cookieArray[index] = cookie;
-					console.log('-----------Refresh Cookie city = ' + cityArray[index] + ', cookie = ' + cookie + ', time = ' + new Date().toGMTString());
+			http.get(options, function(res) {
+				res.on('end', function() {
+					var cookieHeader = response.headers['set-cookie'];
+					if(cookieHeader != null && cookieHeader.length > 0) {
+						var cookie = response.headers['set-cookie'][0].split('\\;');
+						cookieArray[index] = cookie;
+						console.log('-----------Refresh Cookie city = ' + cityArray[index] + ', cookie = ' + cookie + ', time = ' + new Date().toGMTString());
+					}
 				});
 			});
 		});
-	});	
+	});
 }
 
 function keepSessinTask(index){
 	console.log('-------------start time = ' + new Date().toString());
-	setInterval(getBicycleInfoTask, 120000, [index]);
+	setInterval(getBicycleInfoTask, 300000, [index]);
 }
 
 function getBicycleInfoTask(index){
